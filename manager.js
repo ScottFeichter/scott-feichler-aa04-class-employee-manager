@@ -9,21 +9,41 @@ class Manager extends Employee {
     // employee.manager = this.name;
     this.employees.push(employee);
   }
+
+  _totalSubSalary(total = 0, checkE = this.employees) {
+    debugger;
+
+    for (let i = 0; i < checkE.length; i++) {
+      if (checkE[i] instanceof Manager) {
+        total += checkE[i].salary;
+        return checkE[i]._totalSubSalary(total, checkE[i].employees);
+      } else {
+        total += checkE[i].salary;
+      }
+    }
+
+    return total;
+  }
+
+  calculateBonus(multiplier) {
+    return (this.salary + this._totalSubSalary()) * multiplier;
+  }
 }
 
 module.exports = Manager;
 
-const splinter = new Manager("Splinter", 100000, "Sensai");
-console.log("Before: ", splinter);
+// const splinter = new Manager("Splinter", 100000, "Sensei");
+// const leo = new Manager("Leonardo", 90000, "Ninja", splinter);
+// const raph = new Manager("Raphael", 90000, "Ninja", leo);
+// const mikey = new Employee("Michelangelo", 85000, "Grasshopper", raph);
+// const donnie = new Employee("Donatello", 85000, "Grasshopper", raph);
 
-const leo = new Employee("Leonardo", 90000, "Ninja", splinter);
-const mikey = new Employee("Michelangelo", 90000, "Ninja", splinter);
-const donnie = new Employee("Donatello", 90000, "Ninja", splinter);
-const raph = new Employee("Raphael", 90000, "Ninja", splinter);
+// // console.log(splinter);
+// // console.log(leo);
+// // console.log(raph);
 
-// splinter.addEmployee(leo);
-// splinter.addEmployee(mikey);
-// splinter.addEmployee(donnie);
-// splinter.addEmployee(raph);
+// // console.log(leo._totalSubSalary());
 
-console.log("After: ", splinter);
+// console.log(splinter.calculateBonus(0.05)); // => 22500
+// console.log(leo.calculateBonus(0.05)); // => 17500
+// console.log(raph.calculateBonus(0.05)); // => 13000
